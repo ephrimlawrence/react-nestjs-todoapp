@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, Min, MinLength } from 'class-validator';
 
-export class CreateTodoDto {
+export class CreateNoteDto {
   @ApiProperty({
-    description: 'The title of the todo item',
+    description: 'The title of the note',
     example: 'Groceries shopping',
   })
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class CreateTodoDto {
   title: string;
 
   @ApiProperty({
-    description: 'The body of the todo item',
+    description: 'The body of the note',
     example: 'Buy groceries at 5pm today',
   })
   @IsNotEmpty()
@@ -21,9 +21,9 @@ export class CreateTodoDto {
   body: string;
 }
 
-export class UpdateTodoDto extends CreateTodoDto {}
+export class UpdateNoteDto extends CreateNoteDto {}
 
-export class TodoResponseDto extends CreateTodoDto {
+export class NoteResponseDto extends CreateNoteDto {
   @ApiProperty({
     description: 'Unique id of the record',
     example: '638f9115ef73df6d34e3a3b2',

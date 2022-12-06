@@ -1,32 +1,32 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Todo, TodoSchema } from './entities/todo.entity';
-import { TodosController } from './todos.controller';
-import { TodosService } from './todos.service';
+import { Note, NoteSchema } from './entities/note.entity';
+import { NotesController } from './notes.controller';
+import { NotesService } from './notes.service';
 import { faker } from '@faker-js/faker';
 import { NotFoundException } from '@nestjs/common';
 
-describe('TodosController', () => {
-  let controller: TodosController;
+describe('NotesController', () => {
+  let controller: NotesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MongooseModule.forRoot('mongodb://127.0.0.1:27017/todos-app'),
-        MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]),
+        MongooseModule.forRoot('mongodb://127.0.0.1:27017/notes-app'),
+        MongooseModule.forFeature([{ name: Note.name, schema: NoteSchema }]),
       ],
-      controllers: [TodosController],
-      providers: [TodosService],
+      controllers: [NotesController],
+      providers: [NotesService],
     }).compile();
 
-    controller = module.get<TodosController>(TodosController);
+    controller = module.get<NotesController>(NotesController);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should create a todo item', async () => {
+  it('should create a note', async () => {
     const body = {
       title: faker.random.words(),
       body: faker.lorem.paragraphs(),
@@ -40,7 +40,7 @@ describe('TodosController', () => {
     expect(resp.body).toEqual(body.body);
   });
 
-  it('create todo with existing title', async () => {
+  it('create note with existing title', async () => {
     const body = {
       title: faker.random.words(),
       body: faker.lorem.paragraphs(),
@@ -52,12 +52,12 @@ describe('TodosController', () => {
       await controller.create(body);
     } catch (error) {
       expect(error.message).toBe(
-        'A todo with similar title already exists! Not title should be unique',
+        'A note with similar title already exists! Not title should be unique',
       );
     }
   });
 
-  it('should deleted a todo item', async () => {
+  it('should deleted a note', async () => {
     const body = {
       title: faker.random.words(),
       body: faker.lorem.paragraphs(),
@@ -70,11 +70,11 @@ describe('TodosController', () => {
     try {
       await controller.findOne(resp.id.toString());
     } catch (error) {
-      expect(error.message).toBe('Oops! Todo item cannot be found');
+      expect(error.message).toBe('Oops! Note cannot be found');
     }
   });
 
-  it('should update a todo item', async () => {
+  it('should update a note', async () => {
     const body = {
       title: faker.random.words(),
       body: faker.lorem.paragraphs(),

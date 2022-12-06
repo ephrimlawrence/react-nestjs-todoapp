@@ -2,7 +2,7 @@
 
 const e = React.createElement;
 
-function NewTodoItem(props) {
+function NoteItem(props) {
     const [title, setTitle] = React.useState(props.title || '');
     const [body, setBody] = React.useState(props.body || '');
     const [isUpdate, setIsUpdate] = React.useState(props.isUpdate || false);
@@ -38,17 +38,17 @@ function NewTodoItem(props) {
     }, [props]);
 
     const postData = async () => {
-        if(title.length < 3){
-            alert("Todo title must be at least 3 characters")
+        if (title.length < 3) {
+            alert("Note title must be at least 3 characters")
             return;
         }
 
-        if(body.length < 3){
-            alert("Todo body must be at least 3 characters")
+        if (body.length < 3) {
+            alert("Note body must be at least 3 characters")
             return;
         }
 
-        const url = `/api/todos/${isUpdate ? id : ''}`
+        const url = `/api/notes/${isUpdate ? id : ''}`
         const response = await fetch(url, {
             method: isUpdate ? 'PUT' : 'POST',
             mode: 'cors',
@@ -63,11 +63,13 @@ function NewTodoItem(props) {
 
         const json = await response.json();
         props.onItemUpdated(json)
+
+        return json;
     }
 
     const submitButton = () => {
         if (!isUpdate) {
-            return <button onClick={(e) => postData()} className="btn btn-primary d-block w-100 mt-3">Save</button>;
+            return <button onClick={(e) => postData().then(resp => setResetForm(true))} className="btn btn-primary d-block w-100 mt-3">Save</button>;
         }
         return <button onClick={(e) => setResetForm(true)} className="btn btn-primary d-block w-100 mt-3">Done</button>;
     }
@@ -104,7 +106,7 @@ class TodoApp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            todos: [],
+            notes: [],
             isUpdate: false,
             selectedItem: {
                 body: '', title: '', id: ''
@@ -112,9 +114,9 @@ class TodoApp extends React.Component {
         };
     }
 
-    async fetchTodos() {
+    async fetchNotes() {
         // TODO: throw error if input is empty
-        const response = await fetch('/api/todos', {
+        const response = await fetch('/api/notes', {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
@@ -126,12 +128,12 @@ class TodoApp extends React.Component {
         });
 
         const json = await response.json();
-        this.setState({ todos: json })
+        this.setState({ notes: json })
     }
 
     async deleteItem(id) {
         // TODO: throw error if input is empty
-        const response = await fetch(`/api/todos/${id}`, {
+        const response = await fetch(`/api/notes/${id}`, {
             method: 'DELETE',
             mode: 'cors',
             cache: 'no-cache',
@@ -141,40 +143,39 @@ class TodoApp extends React.Component {
                 'Accept': 'application/json'
             },
         });
-        await this.fetchTodos()
+        await this.fetchNotes()
     }
 
     componentDidMount() {
-        this.fetchTodos();
+        this.fetchNotes();
     }
 
     render() {
         return <div className="">
             <div className="row">
                 <div className="col-md-4">
-                    <NewTodoItem
+                    <NoteItem
                         test={this.state.selectedItem}
                         id={this.state.selectedItem.id}
                         body={this.state.selectedItem.body}
                         title={this.state.selectedItem.title}
                         isUpdate={this.state.isUpdate}
                         onItemUpdated={(item) => {
-                            console.log("updated", item)
                             if (this.state.isUpdate) {
-                                const index = this.state.todos.findIndex(i => i.id == item.id)
-                                const temp = this.state.todos;
+                                const index = this.state.notes.findIndex(i => i.id == item.id)
+                                const temp = this.state.notes;
                                 temp[index] = item
-                                this.setState({ todos: temp });
+                                this.setState({ notes: temp });
                             } else {
-                                this.setState({ todos: [...this.state.todos, item] })
+                                this.setState({ notes: [...this.state.notes, item] })
                             }
                         }}
-                    ></NewTodoItem>
+                    ></NoteItem>
                 </div>
 
                 <div className="col-md-8">
                     <div className="row row-cols-1 row-cols-md-1 g-4">
-                        {this.state.todos.map((item, index) => {
+                        {this.state.notes.map((item, index) => {
                             return (
                                 <div className="col" key={index}>
                                     <div className="card">

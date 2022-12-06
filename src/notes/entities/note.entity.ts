@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type TodoDocument = HydratedDocument<Todo>;
+export type NoteDocument = HydratedDocument<Note>;
 
 @Schema({
   toJSON: {
@@ -13,7 +13,7 @@ export type TodoDocument = HydratedDocument<Todo>;
     },
   },
 })
-export class Todo {
+export class Note {
   @Prop({ trim: true, unique: true })
   title: string;
 
@@ -27,4 +27,4 @@ export class Todo {
   updatedAt: Date;
 }
 
-export const TodoSchema = SchemaFactory.createForClass(Todo);
+export const NoteSchema = SchemaFactory.createForClass(Note);

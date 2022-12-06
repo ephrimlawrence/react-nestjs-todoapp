@@ -1,4 +1,4 @@
-<h1 align="center"> Demo Credit API </h1>
+<h1 align="center"> Notes APP </h1>
 
 <p align="center">A prototype REST API for demo credit app, built with <a href="https://github.com/nestjs/nest">Nest</a>
 </p>
@@ -15,7 +15,7 @@ The following are the features of the app:
 
 ## Stack
 
-* `NestJs` with `ExpressJs`
+* `NestJs` + `ExpressJs`, for backend API
 * `Typescript`
 * `MongoDB` as persistent storage
 * `Swagger`, for generating of [OpenAPI Specification](https://spec.openapis.org/oas/latest.html) and API documentation
