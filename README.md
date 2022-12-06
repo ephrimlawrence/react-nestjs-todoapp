@@ -1,10 +1,10 @@
 <h1 align="center"> Notes APP </h1>
 
-<p align="center">A prototype REST API for demo credit app, built with <a href="https://github.com/nestjs/nest">Nest</a>
+<p align="center">A prototype REST API for a notes taking app, built with <a href="https://github.com/nestjs/nest">Nest</a>
 </p>
 
 ## Description
-This project is a prototype todolist app built using [NestJs](https://github.com/nestjs/nest) and React.
+This project is a prototype notes taking app built using [NestJs](https://github.com/nestjs/nest) and React.
 
 ## Features
 
@@ -60,13 +60,3 @@ $ npm run test
 # test coverage
 $ npm run test:cov
 ```
-
-## Database
-Below is the ER Diagram of the database. <br>
-<img alt="ER Diagram" src="./er-diagram.jpg" width="100%">
-
-There are five tables, *accounts, deposits, users, transfers, withdrawals*
-* A user can have multiple accounts
-* Deposits table records all deposits into various accounts of the user
-* Transfers table records all the transfers made the user
-* Withdrawals table records user withdrawals

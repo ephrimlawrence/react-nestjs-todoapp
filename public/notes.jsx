@@ -10,8 +10,6 @@ function NoteItem(props) {
     const [resetForm, setResetForm] = React.useState(false);
 
     React.useEffect(() => {
-        console.log(title)
-        console.log(body)
         if (isUpdate == true) {
             postData()
         }
@@ -28,7 +26,6 @@ function NoteItem(props) {
     }, [resetForm]);
 
     React.useEffect(() => {
-        console.log('changed')
         if (id != props.id) {
             setTitle(props.title)
             setBody(props.body)
