@@ -19,19 +19,22 @@ async function bootstrap() {
   );
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  const config = new DocumentBuilder()
-    .setTitle('Demo Credit API Docs')
-    .setDescription('API documentation for Demo Credit application')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .setBasePath(`${process.env.APP_URL}/api`)
-    .build();
+  try {
+    const config = new DocumentBuilder()
+      .setTitle('Demo Credit API Docs')
+      .setDescription('API documentation for Demo Credit application')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .setBasePath(`${process.env.APP_URL}/api`)
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    writeFileSync('public/swagger-spec.json', JSON.stringify(document));
 
-  const document = SwaggerModule.createDocument(app, config);
-  writeFileSync('public/swagger-spec.json', JSON.stringify(document));
+    SwaggerModule.setup('swagger', app, document);
+  } catch (error) {
+    console.error(error);
+  }
 
-  SwaggerModule.setup('swagger', app, document);
-
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
