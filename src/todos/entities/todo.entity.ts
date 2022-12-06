@@ -3,9 +3,18 @@ import { HydratedDocument } from 'mongoose';
 
 export type TodoDocument = HydratedDocument<Todo>;
 
-@Schema()
+@Schema({
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;
+
+      delete ret.__v;
+      delete ret._id;
+    },
+  },
+})
 export class Todo {
-  @Prop({ trim: true })
+  @Prop({ trim: true, unique: true })
   title: string;
 
   @Prop({ trim: true })
