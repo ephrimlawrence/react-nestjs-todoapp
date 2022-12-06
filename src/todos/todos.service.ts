@@ -20,7 +20,7 @@ export class TodosService {
     const exists = await this.model.findOne({ title: dto.title });
     if (exists != null) {
       throw new ConflictException(
-        'A note with similar title already exists! Not title should be unique',
+        'A todo with similar title already exists! Not title should be unique',
       );
     }
 
