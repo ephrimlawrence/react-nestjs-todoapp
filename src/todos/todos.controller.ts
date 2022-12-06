@@ -33,7 +33,7 @@ export class TodosController {
   })
   @Post()
   create(@Body() createTodoDto: CreateTodoDto) {
-    return this.service.create(createTodoDto);
+    return this.service.create(createTodoDto).then(resp => resp.toJSON());
   }
 
   @ApiOperation({

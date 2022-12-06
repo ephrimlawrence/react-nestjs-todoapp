@@ -7,9 +7,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { isMongoId } from 'class-validator';
 import { Model } from 'mongoose';
-import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo, TodoDocument } from './entities/todo.entity';
-import { CreateTodoDto } from './todos.dto';
+import { CreateTodoDto, UpdateTodoDto } from './todos.dto';
 
 // TODO: add tests
 // TODO: create react app
