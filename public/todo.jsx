@@ -38,7 +38,16 @@ function NewTodoItem(props) {
     }, [props]);
 
     const postData = async () => {
-        // TODO: throw error if input is empty
+        if(title.length < 3){
+            alert("Todo title must be at least 3 characters")
+            return;
+        }
+
+        if(body.length < 3){
+            alert("Todo body must be at least 3 characters")
+            return;
+        }
+
         const url = `/api/todos/${isUpdate ? id : ''}`
         const response = await fetch(url, {
             method: isUpdate ? 'PUT' : 'POST',
@@ -170,7 +179,7 @@ class TodoApp extends React.Component {
                                 <div className="col" key={index}>
                                     <div className="card">
                                         <div className="card-header">
-                                            {item.title}
+                                            {index + 1}. {item.title}
                                         </div>
 
                                         <div className="card-body">
