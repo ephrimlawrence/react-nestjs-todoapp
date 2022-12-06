@@ -24,9 +24,9 @@ async function bootstrap() {
       .setTitle('Demo Credit API Docs')
       .setDescription('API documentation for Demo Credit application')
       .setVersion('1.0')
-      .addBearerAuth()
       .setBasePath(`${process.env.APP_URL}/api`)
       .build();
+
     const document = SwaggerModule.createDocument(app, config);
     writeFileSync('public/swagger-spec.json', JSON.stringify(document));
 
