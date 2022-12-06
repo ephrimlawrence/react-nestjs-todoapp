@@ -11,6 +11,8 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo, TodoDocument } from './entities/todo.entity';
 import { CreateTodoDto } from './todos.dto';
 
+// TODO: add tests
+// TODO: create react app
 @Injectable()
 export class TodosService {
   constructor(@InjectModel(Todo.name) private model: Model<TodoDocument>) {}
