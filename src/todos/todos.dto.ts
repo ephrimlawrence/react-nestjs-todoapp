@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsNotEmpty, IsString, Min, MinLength } from 'class-validator';
 
 export class CreateTodoDto {
   @ApiProperty({
@@ -8,7 +8,7 @@ export class CreateTodoDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Min(1)
+  @MinLength(3)
   title: string;
 
   @ApiProperty({
@@ -17,6 +17,6 @@ export class CreateTodoDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Min(1)
+  @MinLength(3)
   body: string;
 }

@@ -18,7 +18,8 @@ export class TodosService {
   constructor(@InjectModel(Todo.name) private model: Model<TodoDocument>) {}
 
   async create(dto: CreateTodoDto) {
-    const exists = await this.model.find({ title: dto.title });
+    console.log(dto)
+    const exists = await this.model.findOne({ title: dto.title });
     if (exists != null) {
       throw new ConflictException(
         'A note with similar title already exists! Not title should be unique',
