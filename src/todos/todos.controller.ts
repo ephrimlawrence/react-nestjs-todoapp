@@ -6,10 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { UpdateTodoDto } from './dto/update-todo.dto';
-import { CreateTodoDto } from './todos.dto';
+import { CreateTodoDto, UpdateTodoDto } from './todos.dto';
 
 @Controller('api/todos')
 export class TodosController {
@@ -30,9 +30,9 @@ export class TodosController {
     return this.service.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.service.update(+id, updateTodoDto);
+    return this.service.update(id, updateTodoDto);
   }
 
   @Delete(':id')

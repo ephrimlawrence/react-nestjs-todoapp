@@ -20,3 +20,5 @@ export class CreateTodoDto {
   @MinLength(3)
   body: string;
 }
+
+export class UpdateTodoDto extends CreateTodoDto {}

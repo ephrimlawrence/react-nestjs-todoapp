@@ -18,7 +18,6 @@ export class TodosService {
   constructor(@InjectModel(Todo.name) private model: Model<TodoDocument>) {}
 
   async create(dto: CreateTodoDto) {
-    console.log(dto)
     const exists = await this.model.findOne({ title: dto.title });
     if (exists != null) {
       throw new ConflictException(
@@ -55,9 +54,25 @@ export class TodosService {
     return item;
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    // TODO: implement update
-    return `This action updates a #${id} todo`;
+  async update(id: string, dto: UpdateTodoDto) {
+    const exists = await this.model.findOne({
+      title: dto.title,
+      _id: { $ne: id },
+    });
+    if (exists != null) {
+      throw new ConflictException(
+        'A note with similar title already exists! Not title should be unique',
+      );
+    }
+
+    const doc = await this.findOne(id);
+    doc.title = dto.title;
+    doc.body = dto.body;
+    doc.updatedAt = new Date();
+
+    await doc.save();
+
+    return doc;
   }
 
   async remove(id: string) {
