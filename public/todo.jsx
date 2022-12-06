@@ -2,27 +2,58 @@
 
 const e = React.createElement;
 
-class NewTodoItem extends React.Component {
-    constructor(props) {
-        super(props);
+function NewTodoItem(props) {
+    const [title, setTitle] = React.useState(props.title || '');
+    const [body, setBody] = React.useState(props.body || '');
+    const [isUpdate, setIsUpdate] = React.useState(props.isUpdate || false);
+    const [id, setId] = React.useState(props.id || '');
+    const [resetForm, setResetForm] = React.useState(false);
 
-        this.state = { title: props.title || '', body: props.body || '', isUpdate: props.isUpdate || false, id: props.id, onItemUpdated: props.onItemUpdated, done: null };
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        if (state.id == props.id && state.done != null) {
-            return { title: state.title || '', body: state.body || '', isUpdate: state.isUpdate || false, id: state.id, onItemUpdated: state.onItemUpdated };
-
+    React.useEffect(() => {
+        console.log(title)
+        console.log(body)
+        if (isUpdate == true) {
+            postData()
         }
-        return { title: props.title || '', body: props.body || '', isUpdate: props.isUpdate || false, id: props.id, onItemUpdated: props.onItemUpdated };
-    }
+    }, [title, body]);
 
-    async postData() {
+    React.useEffect(() => {
+        if (resetForm == true) {
+            setTitle('')
+            setBody('')
+            setId('')
+            setIsUpdate(false)
+            setResetForm(false)
+        }
+    }, [resetForm]);
+
+    React.useEffect(() => {
+        console.log('changed')
+        if (id != props.id) {
+            setTitle(props.title)
+            setBody(props.body)
+            setId(props.id)
+            setIsUpdate(props.isUpdate);
+        }
+    }, [props]);
+
+    // static getDerivedStateFromProps(props, state) {
+    //     if (state.resetForm == true) {
+    //         return { onItemUpdated: state.onItemUpdated, title: '', body: '', isUpdate: false, id: '', resetForm: false }
+    //     }
+    //     if (state.id == props.id) {
+    //         return { title: state.title || '', body: state.body || '', isUpdate: state.isUpdate || false, id: state.id, onItemUpdated: state.onItemUpdated };
+
+    //     }
+    //     return { title: props.title || '', body: props.body || '', isUpdate: props.isUpdate || false, id: props.id, onItemUpdated: props.onItemUpdated };
+    // }
+
+    const postData = async () => {
         // TODO: throw error if input is empty
-        console.log(this.state)
-        const url = `/api/todos/${this.state.isUpdate ? this.state.id : ''}`
+        // console.log(this.state)
+        const url = `/api/todos/${isUpdate ? id : ''}`
         const response = await fetch(url, {
-            method: this.state.isUpdate ? 'PUT' : 'POST',
+            method: isUpdate ? 'PUT' : 'POST',
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'same-origin',
@@ -30,50 +61,48 @@ class NewTodoItem extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ body: this.state.body, title: this.state.title })
+            body: JSON.stringify({ body: body, title: title })
         });
 
         const json = await response.json();
-        this.state.onItemUpdated(json)
+        props.onItemUpdated(json)
     }
 
-    submitButton() {
-        if (!this.state.isUpdate) {
-            return <button onClick={(e) => this.postData()} className="btn btn-primary d-block w-100 mt-3">Save</button>;
+    const submitButton = () => {
+        if (!isUpdate) {
+            return <button onClick={(e) => postData()} className="btn btn-primary d-block w-100 mt-3">Save</button>;
         }
-        return <button onClick={(e) => this.setState({ title: '', body: '', isUpdate: false, id: '' })} className="btn btn-primary d-block w-100 mt-3">Done</button>;
+        return <button onClick={(e) => setResetForm(true)} className="btn btn-primary d-block w-100 mt-3">Done</button>;
     }
 
-    render() {
-        return <div className="card">
-            <div className="card-body">
+    return <div className="card">
+        <div className="card-body">
 
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Title</label>
-                    <input type="text" className="form-control" value={this.state.title} id="title" placeholder="eg. Grocery shopping" onChange={(e) => {
-                        console.log(e.target.value)
-                        this.setState({ title: e.target.value })
+            <div className="mb-3">
+                <label htmlFor="title" className="form-label">Title</label>
+                <input type="text" className="form-control" value={title} id="title" placeholder="eg. Grocery shopping" onChange={(e) => {
+                    // console.log(e.target.value)
+                    setTitle(e.target.value)
+                    // this.setState({ title: e.target.value })
 
-                        if (this.state.isUpdate == true) {
-                            this.postData()
-                        }
-                    }} />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="body" className="form-label">Body</label>
-                    <textarea className="form-control" id="body" defaultValue={this.state.body} rows="3" onChange={(e) => {
-                        this.setState({ body: e.target.value })
 
-                        if (this.state.isUpdate == true) {
-                            this.postData()
-                        }
-                    }}></textarea>
-                </div>
-
-                {this.submitButton()}
+                }} />
             </div>
+            <div className="mb-3">
+                <label htmlFor="body" className="form-label">Body</label>
+                <textarea className="form-control" id="body" value={body} rows="3" onChange={(e) => {
+                    // this.setState({ body: e.target.value })
+                    setBody(e.target.value);
+
+                    if (isUpdate == true) {
+                        postData()
+                    }
+                }}></textarea>
+            </div>
+
+            {submitButton()}
         </div>
-    }
+    </div>
 }
 
 
@@ -161,8 +190,6 @@ class TodoApp extends React.Component {
 
                                         <div className="card-body">
                                             <p className="card-text">{item.body}</p>
-
-                                            <a href="#" className="btn btn-primary">Go somewhere</a>
                                         </div>
                                         <div className="card-footer text-muted">
                                             <div className="row">
@@ -170,8 +197,8 @@ class TodoApp extends React.Component {
                                                     updated at <br />
                                                     created at
                                                 </div>
-                                                <div className="col-md-2">
-                                                    <button className="btn btn-info btn-sm float-end" onClick={() => {
+                                                <div className="col-md-2 btn-group">
+                                                    <button className="btn btn-info btn-sm float-start" onClick={() => {
                                                         this.setState({ selectedItem: item });
                                                         this.setState({ isUpdate: true });
                                                     }}>Update</button>
