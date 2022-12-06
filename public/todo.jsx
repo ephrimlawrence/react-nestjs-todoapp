@@ -10,7 +10,6 @@ class NewTodoItem extends React.Component {
 
     async postData() {
         // TODO: throw error if input is empty
-
         const response = await fetch('/api/todos', {
             method: 'POST',
             mode: 'cors',
@@ -24,11 +23,6 @@ class NewTodoItem extends React.Component {
         });
         console.log(await response.json());
     }
-
-    //   postData('https://example.com/answer', { answer: 42 })
-    //     .then((data) => {
-    //       console.log(data); // JSON data parsed by `data.json()` call
-    //     });
 
     render() {
         if (this.state.liked) {
@@ -71,13 +65,28 @@ class TodoApp extends React.Component {
                 'Accept': 'application/json'
             },
         });
-        return response.json();
+
+        const json = await response.json();
+        this.setState({ todos: json })
+    }
+
+    async deleteItem(id) {
+        // TODO: throw error if input is empty
+        const response = await fetch(`/api/todos/${id}`, {
+            method: 'DELETE',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        });
+        await this.fetchTodos()
     }
 
     componentDidMount() {
-        this.fetchTodos().then(resp => {
-            this.setState({ todos: resp })
-        })
+        this.fetchTodos();
     }
 
     render() {
@@ -85,7 +94,7 @@ class TodoApp extends React.Component {
             return 'You liked this.';
         }
 
-        return <div className="d-flex">
+        return <div className="">
             <div className="row">
                 <div className="col-md-4">
                     <NewTodoItem></NewTodoItem>
@@ -112,7 +121,7 @@ class TodoApp extends React.Component {
                                                     created at
                                                 </div>
                                                 <div className="col-md-2">
-                                                    <button>Delete</button>
+                                                    <button className="btn btn-danger btn-sm float-end" onClick={(e) => this.deleteItem(item.id)}>Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -125,15 +134,7 @@ class TodoApp extends React.Component {
                     </div>
                 </div>
             </div>
-
-
         </div>
-        // return <button className="btn btn-primary">Working</button>
-        // return e(
-        //     'button',
-        //     { onClick: () => this.setState({ liked: true }) },
-        //     'Like',
-        // );
     }
 }
 
