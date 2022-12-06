@@ -47,7 +47,7 @@ class NewTodoItem extends React.Component {
                     <textarea className="form-control" id="body" rows="3" onChange={(e) => this.setState({ body: e.target.value })}></textarea>
                 </div>
 
-                <button onClick={(e) => this.postData()} className="btn btn-primary">Save</button>
+                <button onClick={(e) => this.postData()} className="btn btn-primary d-block w-100 mt-3">Save</button>
             </div>
         </div>
     }
@@ -56,7 +56,28 @@ class NewTodoItem extends React.Component {
 class TodoApp extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { liked: false };
+        this.state = { todos: [], liked: false };
+    }
+
+    async fetchTodos() {
+        // TODO: throw error if input is empty
+        const response = await fetch('/api/todos', {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        });
+        return response.json();
+    }
+
+    componentDidMount() {
+        this.fetchTodos().then(resp => {
+            this.setState({ todos: resp })
+        })
     }
 
     render() {
@@ -64,35 +85,48 @@ class TodoApp extends React.Component {
             return 'You liked this.';
         }
 
-        return <div className="d-flex justify-content-center">
-            <NewTodoItem></NewTodoItem>
+        return <div className="d-flex">
+            <div className="row">
+                <div className="col-md-4">
+                    <NewTodoItem></NewTodoItem>
+                </div>
+                <div className="col-md-8">
+                    <div className="row row-cols-1 row-cols-md-1 g-4">
+                        {this.state.todos.map((item, index) => {
+                            return (
+                                <div className="col" key={index}>
+                                    <div className="card">
+                                        <div className="card-header">
+                                            {item.title}
+                                        </div>
 
-            <div className="row row-cols-1 row-cols-md-1 g-4">
-                <div className="col">
-                    <div className="card">
-                        <div className="card-header">
-                            Title here
-                        </div>
+                                        <div className="card-body">
+                                            <p className="card-text">{item.body}</p>
 
-                        <div className="card-body">
-                            <p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-
-                            <a href="#" className="btn btn-primary">Go somewhere</a>
-                        </div>
-                        <div className="card-footer text-muted">
-                            <div className="row">
-                                <div className="col-md-10">
-                                    updated at <br />
-                                    created at
+                                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                        <div className="card-footer text-muted">
+                                            <div className="row">
+                                                <div className="col-md-10">
+                                                    updated at <br />
+                                                    created at
+                                                </div>
+                                                <div className="col-md-2">
+                                                    <button>Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-md-2">
-                                    <button>Delete</button>
-                                </div>
-                            </div>
-                        </div>
+                            );
+                        })}
+
+
                     </div>
                 </div>
             </div>
+
+
         </div>
         // return <button className="btn btn-primary">Working</button>
         // return e(
