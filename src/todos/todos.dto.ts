@@ -32,13 +32,13 @@ export class TodoResponseDto extends CreateTodoDto {
 
   @ApiProperty({
     description: 'Last date the record was updated in ISO3610 format',
-    example: '"2022-12-06T18:59:33.272Z',
+    example: '2022-12-06T18:59:33.272Z',
   })
   updatedAt: string;
 
   @ApiProperty({
     description: 'Date the record was created in ISO3610 format',
-    example: '"2022-12-06T18:59:33.272Z',
+    example: '2022-12-06T18:59:33.272Z',
   })
   createdAt: string;
 }
