@@ -1,10 +1,12 @@
-<h1 align="center"> Notes APP </h1>
+<h1 align="center"> Notes pp </h1>
 
-<p align="center">A prototype REST API for a notes taking app, built with <a href="https://github.com/nestjs/nest">Nest</a>
+<p align="center">A prototype REST API for a [notes taking app](https://frail-duck-threads.cyclic.app/index.html), built with <a href="https://github.com/nestjs/nest">Nest</a>
 </p>
 
 ## Description
-This project is a prototype notes taking app built using [NestJs](https://github.com/nestjs/nest) and React.
+This project is a prototype notes taking app built using [NestJs](https://github.com/nestjs/nest) and React. <br>
+
+Interact with the live version of the app: [https://frail-duck-threads.cyclic.app](https://frail-duck-threads.cyclic.app/index.html)
 
 ## Features
 
